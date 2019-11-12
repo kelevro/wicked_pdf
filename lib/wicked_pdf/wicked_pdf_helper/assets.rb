@@ -67,8 +67,14 @@ module WickedPdfHelper
         end
       else
         asset = Rails.application.assets.find_asset(source)
-        asset ? asset.pathname : File.join(Rails.public_path, source)
+        retrieve_pathname(asset, source)
       end
+    end
+
+    def retrieve_pathname(asset, source)
+      return File.join(Rails.public_path, source) unless asset
+
+      asset.respond_to?(:filename) ? asset.filename : asset.pathname
     end
 
     # will prepend a http or default_protocol to a protocol relative URL
